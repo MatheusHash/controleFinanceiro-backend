@@ -6,14 +6,18 @@ import { Users } from 'src/accounts/entities/users.entity';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { AccountsModule } from 'src/accounts/accounts.module';
+import { ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
     AccountsModule, // ✅ para usar AccountsService
     PassportModule.register({ defaultStrategy: 'jwt' }),
-    JwtModule.register({
-      secret: process.env.SECRET_KEY || 'default_secret',
-      signOptions: { expiresIn: '3600s' },
+    JwtModule.registerAsync({
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        secret: config.getOrThrow('SECRET_KEY'),
+        signOptions: { expiresIn: '12h' },
+      }),
     }),
   ],
   providers: [AuthService],
@@ -21,4 +25,3 @@ import { AccountsModule } from 'src/accounts/accounts.module';
   exports: [AuthService],
 })
 export class AuthModule {}
-

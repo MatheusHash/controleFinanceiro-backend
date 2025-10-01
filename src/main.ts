@@ -8,13 +8,13 @@ async function bootstrap() {
   const origin = 'http://localhost:3000';
   app.useGlobalPipes(new ValidationPipe());
   app.enableCors({
-    origin: true, // Permite todas as origens para teste
+    origin: 'http://localhost:3000',
     credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'Cookie', '*'],
+    // methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    // allowedHeaders: ['Content-Type', 'Authorization'],
   });
   app.use(cookieParser());
 
-  await app.listen(process.env.PORT ?? 5000);
+  await app.listen(5000);
 }
 bootstrap();

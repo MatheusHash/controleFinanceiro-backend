@@ -1,13 +1,4 @@
-import {
-  Controller,
-  Post,
-  Body,
-  Res,
-  UnauthorizedException,
-  Get,
-  Req,
-  HttpException,
-} from '@nestjs/common';
+import { Controller, Post, Body, Res, Get, Req } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import type { LoginDto } from './dto/login.dto';
 import type { Response, Request } from 'express';
@@ -21,19 +12,8 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response,
   ) {
     try {
-      console.log('=== INICIANDO LOGIN ===');
-      console.log('Dados recebidos:', loginDto);
-
       const auth = await this.authService.login(loginDto, res);
-      console.log('Login service retornou:', auth);
-
-      // Verifica se o cookie foi setado
-      console.log('Cookie configurado no response');
-
-      return {
-        user: auth.data.user,
-        status: auth.status,
-      };
+      return res.json({ user: auth.data.user }).status(auth.status).end();
     } catch (error) {
       console.error('Erro no login:', error);
       throw error;
@@ -42,36 +22,16 @@ export class AuthController {
 
   @Get('me')
   async me(@Req() req: Request, @Res() res: Response) {
-    console.log('=== ENDPOINT ME CHAMADO ===');
-    console.log('Headers:', req.headers);
-    console.log('Cookies brutos:', req.cookies);
-    console.log('Cookie header:', req.headers.cookie);
+    const authToken = req.cookies.token;
 
-    // Verifica todos os cookies
-    if (req.cookies) {
-      Object.keys(req.cookies).forEach((key) => {
-        console.log(`Cookie [${key}]:`, req.cookies[key]);
-      });
-    }
-
-    const token = req.cookies?.token;
-    console.log('Token encontrado:', token);
-
-    if (!token) {
-      console.log('❌ NENHUM TOKEN ENCONTRADO NOS COOKIES');
+    if (!authToken) {
       return res.status(401).json({ message: 'Não autenticado' });
     }
 
     try {
-      const tokenValue = typeof token === 'object' ? token.token : token;
-      console.log('Token value:', tokenValue);
-
-      const decoded = this.authService['jwtService'].verify(tokenValue);
-      console.log('Token decodificado:', decoded);
+      const decoded = this.authService['jwtService'].verify(authToken);
 
       const user = await this.authService.getProfile(decoded.sub);
-      console.log('Usuário encontrado:', user);
-
       return res.json(user);
     } catch (error) {
       console.error('Erro ao verificar token:', error);

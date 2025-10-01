@@ -22,7 +22,7 @@ export class AuthService {
     return null;
   }
 
-  async login(loginDto: LoginDto, res?: Response) {
+  async login(loginDto: LoginDto, res: Response) {
     const { email, password } = loginDto;
 
     try {
@@ -54,19 +54,14 @@ export class AuthService {
       const token = this.jwtService.sign(payload);
 
       // Se receber o response object, configura o cookie
-      if (res) {
-        res.cookie('token', token, {
-          httpOnly: true,
-          secure: false, // false para desenvolvimento
-          sameSite: 'none', // Tente 'none' para desenvolvimento
-          maxAge: 1000 * 60 * 60 * 24 * 7,
-          // domain: 'localhost', // Remova esta linha para teste
-          path: '/', // Adicione path
-        });
-      }
+      res.cookie('token', token, {
+        httpOnly: true,
+        secure: false, // false para desenvolvimento
+        sameSite: 'lax',
+      });
 
       return {
-        data: { user: safeUser, token },
+        data: { user: safeUser },
         status: HttpStatus.OK,
       };
     } catch (error) {
