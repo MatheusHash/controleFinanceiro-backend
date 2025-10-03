@@ -53,6 +53,7 @@ export class AccountsService {
     return this.usersRepository.findOne({
       where: { id },
       relations: ['account'],
+      select: ['id', 'account', 'email', 'name'],
     });
   }
 }

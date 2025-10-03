@@ -13,24 +13,22 @@ export class AuthController {
   ) {
     try {
       const auth = await this.authService.login(loginDto, res);
-      return res.json({ user: auth.data.user }).status(auth.status).end();
+      return { user: auth.data.user, status: auth.status };
     } catch (error) {
       console.error('Erro no login:', error);
       throw error;
     }
   }
 
-  @Get('me')
+  @Get('user/me')
   async me(@Req() req: Request, @Res() res: Response) {
     const authToken = req.cookies.token;
-
     if (!authToken) {
       return res.status(401).json({ message: 'Não autenticado' });
     }
 
     try {
       const decoded = this.authService['jwtService'].verify(authToken);
-
       const user = await this.authService.getProfile(decoded.sub);
       return res.json(user);
     } catch (error) {
@@ -38,6 +36,7 @@ export class AuthController {
       return res.status(401).json({ message: 'Token inválido' });
     }
   }
+
   @Post('logout')
   async logout(@Res({ passthrough: true }) res: Response) {
     res.clearCookie('token');
