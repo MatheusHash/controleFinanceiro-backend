@@ -5,6 +5,7 @@ import { Account } from './entities/account.entity';
 import type { Repository } from 'typeorm';
 import { Users } from './entities/users.entity';
 import * as bcrypt from 'bcrypt';
+import type { Response } from 'express';
 
 @Injectable()
 export class AccountsService {
@@ -14,6 +15,7 @@ export class AccountsService {
     @InjectRepository(Users)
     private readonly usersRepository: Repository<Users>,
   ) {}
+
   async createAccount(createAccountDto: CreateAccountDto) {
     try {
       // 1. Criar a conta (sem dados, apenas com id)

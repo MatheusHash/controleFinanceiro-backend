@@ -1,4 +1,5 @@
 // bill.entity.ts
+import { Category } from 'src/categories/entities/category.entity';
 import {
   Column,
   Entity,
@@ -6,7 +7,6 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Categorie } from './categories.entity';
 
 @Entity({ name: 'bills' })
 export class Bill {
@@ -16,16 +16,16 @@ export class Bill {
   @Column({ type: 'text' })
   name: string;
 
-  @Column({ type: 'float' })
-  value: number;
+  @Column({ type: 'decimal', precision: 10, scale: 2 })
+  amount: number;
 
-  @ManyToOne(() => Categorie, (categorie) => categorie.bills, {
-    onDelete: 'SET NULL',
+  @ManyToOne(() => Category, (category) => category.bills, {
+    onDelete: 'SET NULL', // se a categoria for excluída, o campo fica NULL
   })
-  @JoinColumn({ name: 'categorie_id' })
-  categorie: Categorie;
+  @JoinColumn({ name: 'category_id' })
+  category: Category;
 
-  // opcional, se quiser acesso direto ao id da categoria
+  // Campo opcional para acesso direto ao id da categoria
   @Column({ nullable: true })
-  categorie_id: number;
+  category_id: number;
 }

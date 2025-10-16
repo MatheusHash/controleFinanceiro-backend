@@ -4,6 +4,8 @@ import { UpdateBillDto } from './dto/update-bill.dto';
 
 @Injectable()
 export class BillsService {
+  constructor() {} // private readonly categoriesRepository: Repository<Categorie>, // @InjectRepository(Categorie)
+
   create(createBillDto: CreateBillDto) {
     return 'This action adds a new bill';
   }

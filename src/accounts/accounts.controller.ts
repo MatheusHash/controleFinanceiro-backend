@@ -13,7 +13,7 @@ export class AccountsController {
   }
   @Get('user/me')
   async me(@Req() req: Request, @Res() res: Response) {
-    const authToken = req.cookies.token;
+    const authToken = req.cookies.token as string;
     if (!authToken) {
       return res.status(401).json({ message: 'Não autenticado' });
     }
@@ -27,8 +27,9 @@ export class AccountsController {
       return res.status(401).json({ message: 'Token inválido' });
     }
   }
+
   @Post('logout')
-  async logout(@Res({ passthrough: true }) res: Response) {
+  logout(@Res({ passthrough: true }) res: Response) {
     res.clearCookie('token');
     return { message: 'Logout realizado com sucesso' };
   }
@@ -39,7 +40,7 @@ export class AccountsController {
     @Req() req: Request,
     @Res() res: Response,
   ) {
-    const authToken = req.cookies.token;
+    const authToken = req.cookies.token as string;
     if (!authToken) {
       return res.status(401).json({ message: 'Não autenticado' });
     }
