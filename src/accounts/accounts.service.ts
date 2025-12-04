@@ -5,7 +5,6 @@ import { Account } from './entities/account.entity';
 import type { Repository } from 'typeorm';
 import { Users } from './entities/users.entity';
 import * as bcrypt from 'bcrypt';
-import type { Response } from 'express';
 
 @Injectable()
 export class AccountsService {
@@ -37,6 +36,7 @@ export class AccountsService {
       // 4. Retornar os dois (ou só o user, se preferir)
       return { data: { account, user }, status: HttpStatus.CREATED };
     } catch (err) {
+      console.log(err);
       return {
         data: null,
         status: HttpStatus.INTERNAL_SERVER_ERROR,

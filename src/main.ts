@@ -8,7 +8,7 @@ async function bootstrap() {
   const origin = 'http://localhost:3000';
   app.useGlobalPipes(new ValidationPipe());
   app.enableCors({
-    origin: 'http://localhost:3000',
+    origin,
     credentials: true,
     // methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     // allowedHeaders: ['Content-Type', 'Authorization'],
@@ -16,5 +16,6 @@ async function bootstrap() {
   app.use(cookieParser());
 
   await app.listen(5000);
+  console.log(await app.getUrl());
 }
 bootstrap();
