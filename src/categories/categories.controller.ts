@@ -8,7 +8,6 @@ export class CategoriesController {
 
   @Post('create')
   create(@Body() createCategoryDto: CreateCategoryDto) {
-    console.log('Received DTO:', createCategoryDto);
     return this.categoriesService.create(createCategoryDto);
   }
 

@@ -23,7 +23,7 @@ export class AccountsService {
 
       // 2. Criptografa a senha para armazenar no banco
       const hashPassword = bcrypt.hashSync(createAccountDto.password, 8);
-      createAccountDto['password'] = hashPassword;
+      createAccountDto['password'] = hashPassword as string;
 
       // 3. Criar o usuário já relacionando com a conta
       const user = this.usersRepository.create({

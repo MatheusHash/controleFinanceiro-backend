@@ -15,7 +15,7 @@ export class AuthController {
       const auth = await this.authService.login(loginDto, res);
       return { user: auth.data.user, status: auth.status };
     } catch (error) {
-      console.error('Erro no login:', error);
+      console.error('Erro no login: ', error);
       throw error;
     }
   }
