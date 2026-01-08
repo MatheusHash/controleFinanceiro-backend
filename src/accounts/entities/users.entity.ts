@@ -4,12 +4,13 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
   JoinColumn,
+  OneToMany,
 } from 'typeorm';
 import { Account } from './account.entity';
+import { Bill } from 'src/bills/entities/bill.entity';
 
 @Entity({ name: 'users' })
 export class Users {
-  @Column()
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -22,10 +23,16 @@ export class Users {
   @Column({ type: 'text' })
   password: string;
 
+  @Column()
+  account_id: number;
+
   // Relacionamento: cada usuário pertence a uma conta
   @ManyToOne(() => Account, (account) => account.users, {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'account_id' })
   account: Account;
+
+  @OneToMany(() => Bill, (bill) => bill.user)
+  bills: Bill[];
 }

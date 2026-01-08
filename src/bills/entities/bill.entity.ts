@@ -1,4 +1,5 @@
 // bill.entity.ts
+import { Users } from 'src/accounts/entities/users.entity';
 import { Category } from 'src/categories/entities/category.entity';
 import {
   Column,
@@ -28,4 +29,14 @@ export class Bill {
   // Campo opcional para acesso direto ao id da categoria
   @Column({ nullable: true })
   category_id: number;
+
+  @Column()
+  user_id: number;
+
+  // Relacionamento: cada conta pertence a um usuário
+  @ManyToOne(() => Users, (user) => user.bills, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'user_id' })
+  user: Users;
 }
